@@ -1,7 +1,7 @@
 SimplePasswordAuthentication
 ============================
 
-Introduction goes here.
+Authenticate using username and password. Relies on the SimpleAuthentication base.
 
 
 Example
@@ -10,4 +10,4 @@ Example
 Example goes here.
 
 
-Copyright (c) 2009 [name of plugin creator], released under the MIT license
+Copyright (c) 2009 Tore Darell, released under the MIT license
