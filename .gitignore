@@ -1,2 +1,3 @@
 test/*.log
 test/*.sqlite*
+*.swp
