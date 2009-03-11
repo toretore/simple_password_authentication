@@ -1,5 +1,4 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
-require 'user'
 
 load_schema
 
@@ -22,24 +21,34 @@ class UserTest < Test::Unit::TestCase
     assert_equal u.salt, new_salt
   end
 
-  def test_correct_password_should_return_true_if_salted_password_equals_stored_password
-    assert @user.correct_password?("password")
-    assert !@user.correct_password?("heinz")
+  def test_password_should_be_hashed
+    u = User.new(:password => "humbaba")
+    assert_equal "humbaba", u.password
+    assert_equal User.hash_password("humbaba", u.salt), u.hashed_password
+    u.password = "ereshkigal"
+    assert_equal "ereshkigal", u.password
+    assert_equal User.hash_password("ereshkigal", u.salt), u.hashed_password
   end
 
-  def test_correct_password_should_compare_unhashed_password_when_not_saved
-    u = User.new
+  def test_password_should_be_available_in_plaintext_while_object_is_alive
+    u = User.new(:password => "mordechai")
+    assert_equal "mordechai", u.password
+    u.password = "nibiru"
+    assert_equal "nibiru", u.password
+  end
+
+  def test_password_should_be_gone_when_
+  end
+
+  def test_correct_password
+    assert @user.correct_password?("password")
+    assert !@user.correct_password?("heinz")
+    u = User.new(:username => "enkidu")
     assert !u.correct_password?("foo")
     u.password = "bar"
     assert u.correct_password?("bar")
-  end
-
-  def test_should_hash_password_on_save
-    u = User.new(:username => "enkidu", :password => "password", :password_confirmation => "password")
-    assert_equal "password", u.password
     u.save!
-    assert_not_equal "password", u.password
-    assert_equal User.hash_password("password", u.salt), u.password
+    assert u.correct_password?("bar")
   end
 
   def test_authenticate_should_return_user_with_matching_username_and_salted_password

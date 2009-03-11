@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
+require "user"
 
 load_schema
 
@@ -13,7 +14,7 @@ class PasswordAuthenticatorTest < Test::Unit::TestCase
     @controller = HorsesController.new
     @auth = SimpleAuthentication::PasswordAuthenticator.new(@controller)
     User.delete_all
-    @user = User.create!(:username => "humbaba", :password => "password", :password_confirmation => "password")
+    @user = User.create!(:username => "humbaba", :password => "password")
   end
 
   def test_authentication_should_be_possible_with_username_and_password_params

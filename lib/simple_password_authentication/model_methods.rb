@@ -8,9 +8,7 @@ module SimplePasswordAuthentication
 
     module User
 
-      def self.included(mod)
-        mod.extend(ClassMethods)
-      end
+      attr_accessor :password
 
       #Returns the salt value. If there is no value, one is generated.
       def salt
@@ -26,20 +24,19 @@ module SimplePasswordAuthentication
         end
       end
 
+      def hashed_password=(pw)
+        write_attribute(:hashed_password, self.class.hash_password(pw, salt))
+      end
+
+      def password=(pw)
+        self.hashed_password = @password = pw
+      end
+
       def correct_password?(pw)
-        if password_changed?
-          pw == password
-        else
-          self.class.hash_password(pw, salt) == password
-        end
+        self.class.hash_password(pw, salt) == hashed_password
       end
 
     private
-
-      #Hash the password using the salt
-      def hash_password
-        write_attribute(:password, self.class.hash_password(password, salt))
-      end
 
 
       module ClassMethods
@@ -70,10 +67,9 @@ module SimplePasswordAuthentication
       module Behavior
 
         def self.included(model_class)
-          model_class.validates_presence_of :username, :password
+          model_class.validates_presence_of :username, :hashed_password
           model_class.validates_confirmation_of :password
           model_class.validates_uniqueness_of :username
-          model_class.before_save :hash_password, :if => lambda{|u| u.password_changed? }
         end
 
       end

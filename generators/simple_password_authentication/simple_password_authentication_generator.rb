@@ -25,7 +25,7 @@ private
 
   def simple_auth_attributes
     returning attributes.dup do |attributes|
-      {"username" => "string", "password" => "string", "salt" => "string"}.each do |name, type|
+      {"username" => "string", "hashed_password" => "string", "salt" => "string"}.each do |name, type|
         attributes << Rails::Generator::GeneratedAttribute.new(name, type) unless attributes.any?{|a| a.name == name }
       end
     end
