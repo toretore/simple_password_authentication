@@ -1,5 +1,5 @@
 Description:
-  Create user migration
+  Add fields to users table for username/password authentication
 
 Example:
     ./script/generate simple_password_authentication --migration User
