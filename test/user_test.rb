@@ -1,4 +1,9 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
+require "user"
+
+class User
+  include SimplePasswordAuthentication::ModelMethods::User::Behavior
+end
 
 load_schema
 
